@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star Bounce</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <a href="../../index.html" class="arcade-back">← Arcade</a>
+
+  <!-- ============ SETUP SCREEN (wooden table, matches the arcade shell) ============ -->
+  <div class="setup-screen" id="setupScreen">
+    <div class="title-block">
+      <h1>STAR BOUNCE</h1>
+      <div class="sub">Defend Your Line</div>
+    </div>
+
+    <div class="setup-layout">
+      <div class="setup-left">
+        <div class="preview-wrap">
+          <canvas id="previewCanvas" width="360" height="360"></canvas>
+        </div>
+        <div class="caption">Bots holding the line...</div>
+      </div>
+
+      <div class="setup-right">
+        <div class="settings-card">
+          <h3>Play Mode</h3>
+          <div class="option-row">
+            <button class="opt-btn selected" id="localModeBtn">Local Game</button>
+            <button class="opt-btn" id="onlineModeBtn">Online Multiplayer</button>
+          </div>
+          <div class="hint-text" id="modeHint"></div>
+        </div>
+
+        <div id="localPanel">
+          <div class="settings-card">
+            <h3>Number of Players</h3>
+            <div class="option-row" id="countRow"></div>
+            <div class="hint-text" id="countHint"></div>
+          </div>
+
+          <div class="settings-card">
+            <h3>Players &amp; Bots</h3>
+            <div id="slotsWrap"></div>
+          </div>
+
+          <button class="btn start-btn" id="startBtn">Start Game</button>
+        </div>
+
+        <div id="onlinePanel" class="hidden">
+          <div class="settings-card">
+            <div class="option-row">
+              <button class="opt-btn selected" id="createTabBtn">Create Room</button>
+              <button class="opt-btn" id="joinTabBtn">Join Room</button>
+            </div>
+          </div>
+
+          <div id="createForm">
+            <div class="settings-card">
+              <h3>Your Name</h3>
+              <input class="text-input" id="createNameInput" maxlength="24" placeholder="e.g. Ak">
+            </div>
+            <div class="settings-card">
+              <h3>Number of Players</h3>
+              <div class="option-row" id="onlineCountRow"></div>
+              <div class="hint-text" id="onlineCountHint"></div>
+            </div>
+            <div class="settings-card">
+              <h3>Seats</h3>
+              <div id="onlineSlotsWrap"></div>
+              <div class="hint-text">Seat 1 is you. Other seats can be left open for friends to join, or filled with bots.</div>
+            </div>
+            <div class="error-text" id="createError"></div>
+            <button class="btn start-btn" id="createRoomBtn">Create Room</button>
+          </div>
+
+          <div id="joinForm" class="hidden">
+            <div class="settings-card">
+              <h3>Your Name</h3>
+              <input class="text-input" id="joinNameInput" maxlength="24" placeholder="e.g. Ak">
+            </div>
+            <div class="settings-card">
+              <h3>Room Code</h3>
+              <input class="text-input code-input" id="joinCodeInput" maxlength="5" placeholder="ABCDE">
+            </div>
+            <div class="error-text" id="joinError"></div>
+            <button class="btn start-btn" id="joinRoomBtn">Join Room</button>
+          </div>
+
+          <div id="lobbyWait" class="hidden">
+            <div class="settings-card lobby-code-card">
+              <h3>Room Code</h3>
+              <div class="lobby-code-row">
+                <div class="lobby-code" id="lobbyCodeDisplay"></div>
+                <button class="btn secondary" id="copyCodeBtn">Copy</button>
+              </div>
+              <div class="hint-text">Share this code — friends pick "Join Room" and enter it.</div>
+            </div>
+            <div class="settings-card">
+              <h3>Seats</h3>
+              <div id="lobbySeats"></div>
+            </div>
+            <div class="hint-text" id="lobbyWaitMsg"></div>
+            <button class="btn start-btn hidden" id="lobbyStartBtn">Start Game</button>
+            <button class="btn secondary start-btn" id="lobbyLeaveBtn">Leave Room</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ GAME SCREEN (space) ============ -->
+  <div class="game-screen hidden" id="gameScreen">
+    <div class="hud" id="hud"></div>
+
+    <div class="winner-banner" id="winnerBanner"></div>
+
+    <div class="arena-wrap">
+      <canvas id="gameCanvas" width="520" height="520"></canvas>
+      <div class="paddle-controls" id="paddleControls"></div>
+    </div>
+
+    <div class="status-line" id="statusLine"></div>
+
+    <div class="controls">
+      <button class="btn secondary" id="homeBtn">Change Settings</button>
+      <button class="btn" id="restartBtn">Restart</button>
+    </div>
+
+    <div class="rules">
+      Balls launch from the corner cannons and speed up over the course of the match. Click your
+      control to slide your paddle to the other end of your line — leave a ball unblocked and you
+      lose one of 5 lives. Lose them all and your line turns into a solid wall. Last line standing wins.
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="sim.js"></script>
+  <script src="render.js"></script>
+  <script src="game.js"></script>
+  <script src="net.js"></script>
+</body>
+</html>
